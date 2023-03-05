@@ -3,6 +3,7 @@ const holdingModel = require("./models");
 const app = express();
 const bp = require('body-parser')
 const {quote, search, historical} = require("./services/yahooFinance");
+const { createHolding } = require("./services/holding");
 
 app.use(bp.json())
 app.use(bp.urlencoded({ extended: true }))
@@ -16,8 +17,7 @@ app.get('/', (req, res) => {
 });
 
 app.post("/addHolding", async (request, response) => {
-    console.log(request);
-    const holding = new holdingModel(request.body);
+    const holding = await createHolding(request.body);
     try {
       await holding.save();
       response.send(holding);

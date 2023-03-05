@@ -17,7 +17,7 @@ const HoldingSchema = new mongoose.Schema({
   },
   sector: {
     type: String,
-    default: 0,
+    required: true,
   },
   fiveYearCAGR: {
     type: Number,
