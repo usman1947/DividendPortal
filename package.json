@@ -12,7 +12,8 @@
     "dotenv": "^16.0.3",
     "express": "^4.17.1",
     "mongodb": "^5.1.0",
-    "mongoose": "^7.0.0"
+    "mongoose": "^7.0.0",
+    "yahoo-finance2": "^2.3.10"
   },
   "author": "Usman",
   "license": "ISC",
