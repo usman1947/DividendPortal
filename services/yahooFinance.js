@@ -7,7 +7,7 @@ async function quote(symbol){
 }
 
 async function search(symbol){
-    const results = await yahooFinance.quote(symbol);
+    const results = await yahooFinance.search(symbol);
     return results
 }
 
