@@ -1,5 +1,5 @@
 const yahooFinance = require('yahoo-finance2').default; 
-const {subtractYears, calculateAverageAnnualGrowth} = require("../utils")
+const {subtractYears} = require("../utils")
 
 async function quote(symbol){
     const results = await yahooFinance.quote(symbol);
