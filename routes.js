@@ -35,7 +35,7 @@ app.get("/holdings", async (request, response) => {
     }
 });
 
-app.put("/holdings/:id", async (request, response) => {
+app.put("/holding/:id", async (request, response) => {
   const { id } = request.params;
   const updates = request.body;
   try {
@@ -49,7 +49,7 @@ app.put("/holdings/:id", async (request, response) => {
   }
 });
 
-app.delete("/holdings/:id", async (request, response) => {
+app.delete("/holding/:id", async (request, response) => {
   const { id } = request.params;
   try {
     const holding = await holdingModel.findByIdAndDelete(id);
