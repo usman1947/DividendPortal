@@ -5,11 +5,17 @@ const bp = require('body-parser')
 const {historical} = require("./yahooFinance");
 const {calculateAverageAnnualGrowth} = require("../utils")
 
-async function createHolding(data){
-    let holding = new holdingModel(data);
-    const historicalDividendData = await historical(data.ticker); 
-    holding.fiveYearCAGR = calculateAverageAnnualGrowth(historicalDividendData)
-    return holding
-}
+const createHolding = async (holdings) => {
+    try {
+      let holdingDocs = holdings.map(holding => new holdingModel(holding));
+      holdingDocs.forEach(async holding => {
+        const historicalDividendData = await historical(holding.ticker); 
+        holding.fiveYearCAGR = calculateAverageAnnualGrowth(historicalDividendData)
+      })
+      return await holdingModel.insertMany(holdingDocs);
+    } catch (error) {
+      throw new Error(error);
+    }
+};
 
 exports.createHolding = createHolding;
