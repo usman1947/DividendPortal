@@ -16,16 +16,15 @@ app.get('/', (req, res) => {
   res.send('Server is running');
 });
 
-app.post("/addHolding", async (request, response) => {
-    const holding = await createHolding(request.body);
-    try {
-      await holding.save();
-      response.send(holding);
-    } catch (error) {
-      response.status(500).send(error);
-    }
+app.post("/addHoldings", async (request, response) => {
+  try {
+    const holdings = request.body;
+    const savedHoldings = await createHolding(holdings);
+    response.send(savedHoldings);
+  } catch (error) {
+    response.status(500).send(error);
+  }
 });
-
 
 app.get("/holdings", async (request, response) => {
     const holdings = await holdingModel.find();
@@ -34,6 +33,33 @@ app.get("/holdings", async (request, response) => {
     } catch (error) {
       response.status(500).send(error);
     }
+});
+
+app.put("/holdings/:id", async (request, response) => {
+  const { id } = request.params;
+  const updates = request.body;
+  try {
+    const holding = await holdingModel.findByIdAndUpdate(id, updates, { new: true });
+    if (!holding) {
+      return response.status(404).send();
+    }
+    response.send(holding);
+  } catch (error) {
+    response.status(500).send(error);
+  }
+});
+
+app.delete("/holdings/:id", async (request, response) => {
+  const { id } = request.params;
+  try {
+    const holding = await holdingModel.findByIdAndDelete(id);
+    if (!holding) {
+      return response.status(404).send();
+    }
+    response.send(holding);
+  } catch (error) {
+    response.status(500).send(error);
+  }
 });
 
 app.get("/search", async (request, response) => {

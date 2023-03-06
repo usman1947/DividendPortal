@@ -7,15 +7,21 @@ const {calculateAverageAnnualGrowth} = require("../utils")
 
 const createHolding = async (holdings) => {
     try {
-      let holdingDocs = holdings.map(holding => new holdingModel(holding));
-      holdingDocs.forEach(async holding => {
-        const historicalDividendData = await historical(holding.ticker); 
-        holding.fiveYearCAGR = calculateAverageAnnualGrowth(historicalDividendData)
-      })
+      const holdingDocs = await Promise.all(
+        holdings.map(async (holding) => {
+          const historicalDividendData = await historical(holding.ticker);
+          const fiveYearCAGR = calculateAverageAnnualGrowth(historicalDividendData);
+          return new holdingModel({
+            ...holding,
+            fiveYearCAGR,
+          });
+        })
+      );
       return await holdingModel.insertMany(holdingDocs);
     } catch (error) {
       throw new Error(error);
     }
-};
+  };
+  
 
 exports.createHolding = createHolding;
