@@ -19,6 +19,18 @@ const HoldingSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  name: {
+    type: String,
+    required: false,
+  },
+  domain: {
+    type: String,
+    required: false,
+  },
+  logo: {
+    type: String,
+    required: false,
+  },
   fiveYearCAGR: {
     type: Number,
     default: 0,
