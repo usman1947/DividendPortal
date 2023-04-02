@@ -133,6 +133,7 @@ app.post("/register", async (req, res) => {
     return res
       .cookie("token", token, {
         httpOnly: process.env.NODE_ENV === "production",
+        sameSite: "none",
       })
       .json({
         success: true,
@@ -178,6 +179,7 @@ app.post("/login", async (req, res) => {
     return res
       .cookie("token", token, {
         httpOnly: process.env.NODE_ENV === "production",
+        sameSite: "none",
       })
       .json({
         success: true,
