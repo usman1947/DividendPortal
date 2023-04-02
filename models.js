@@ -36,6 +36,10 @@ const HoldingSchema = new mongoose.Schema({
     default: 0,
     required: true,
   },
+  user_id: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+  },
   createdDate: {
     type: Date,
     default: new Date(),
@@ -43,6 +47,19 @@ const HoldingSchema = new mongoose.Schema({
   },
 });
 
-const Holding = mongoose.model("Holding", HoldingSchema);
+const UserSchema = new mongoose.Schema({
+  name: String,
+  email: { type: String, unique: true },
+  password: String,
+  token: String,
+  createdDate: {
+    type: Date,
+    default: new Date(),
+    required: true,
+  },
+});
 
-module.exports = Holding;
+const HoldingModel = mongoose.model("Holding", HoldingSchema);
+const UserModel = mongoose.model("User", UserSchema);
+
+module.exports = { HoldingModel, UserModel };
