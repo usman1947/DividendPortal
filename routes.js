@@ -108,13 +108,19 @@ app.post("/register", async (req, res) => {
     const { name, email, password } = req.body;
     //Check empty-ness of the incoming data
     if (!name || !email || !password) {
-      return res.json({ message: "Please enter all the details" });
+      return res.json({
+        success: false,
+        message: "Please enter all the details",
+      });
     }
 
     //Check if the user already exist or not
     const userExist = await UserModel.findOne({ email: email });
     if (userExist) {
-      return res.json({ message: "User already exist with the given email" });
+      return res.json({
+        success: false,
+        message: "User already exist with the given email",
+      });
     }
 
     //Hash the password
@@ -126,13 +132,12 @@ app.post("/register", async (req, res) => {
     const token = getToken(user._id);
     return res
       .cookie("token", token, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
+        httpOnly: process.env.NODE_ENV === "production",
       })
       .json({
         success: true,
         message: "User registered successfully",
-        data: user,
+        data: { id: user._id, name: user.name },
       });
   } catch (error) {
     return res.json({ error: error });
@@ -144,20 +149,23 @@ app.post("/login", async (req, res) => {
     const { email, password } = req.body;
     //Check empty-ness of the incoming data
     if (!email || !password) {
-      return res.json({ message: "Please enter all the details" });
+      return res.json({
+        message: "Please enter all the details",
+        success: false,
+      });
     }
 
     //Check if the user already exist or not
     const userExist = await UserModel.findOne({ email: email });
     if (!userExist) {
-      return res.json({ message: "Wrong credentials" });
+      return res.json({ message: "Wrong credentials", success: false });
     }
 
     //Check password match
     const isPasswordMatched = bcrypt.compare(password, userExist.password);
 
     if (!isPasswordMatched) {
-      return res.json({ message: "Incorrect Password" });
+      return res.json({ message: "Incorrect Password", success: false });
     }
 
     const token = getToken(userExist._id);
@@ -165,10 +173,13 @@ app.post("/login", async (req, res) => {
     await userExist.save();
     return res
       .cookie("token", token, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
+        httpOnly: process.env.NODE_ENV === "production",
       })
-      .json({ success: true, message: "LoggedIn Successfully" });
+      .json({
+        success: true,
+        message: "LoggedIn Successfully",
+        data: { id: userExist._id, name: userExist.name },
+      });
   } catch (error) {
     return res.json({ error: error });
   }
