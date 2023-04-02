@@ -140,6 +140,7 @@ app.post("/register", async (req, res) => {
         data: { id: user._id, name: user.name },
       });
   } catch (error) {
+    console.log(error);
     return res.json({ error: error });
   }
 });
@@ -162,7 +163,10 @@ app.post("/login", async (req, res) => {
     }
 
     //Check password match
-    const isPasswordMatched = bcrypt.compare(password, userExist.password);
+    const isPasswordMatched = await bcrypt.compare(
+      password,
+      userExist.password
+    );
 
     if (!isPasswordMatched) {
       return res.json({ message: "Incorrect Password", success: false });
@@ -181,6 +185,7 @@ app.post("/login", async (req, res) => {
         data: { id: userExist._id, name: userExist.name },
       });
   } catch (error) {
+    console.log(error);
     return res.json({ error: error });
   }
 });
