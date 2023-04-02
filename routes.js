@@ -134,6 +134,7 @@ app.post("/register", async (req, res) => {
       .cookie("token", token, {
         httpOnly: process.env.NODE_ENV === "production",
         sameSite: "none",
+        secure: process.env.NODE_ENV === "production",
       })
       .json({
         success: true,
@@ -180,6 +181,7 @@ app.post("/login", async (req, res) => {
       .cookie("token", token, {
         httpOnly: process.env.NODE_ENV === "production",
         sameSite: "none",
+        secure: process.env.NODE_ENV === "production",
       })
       .json({
         success: true,
