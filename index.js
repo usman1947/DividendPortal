@@ -1,11 +1,13 @@
-const express = require('express');
-const cors = require('cors');
-const dotenv = require('dotenv');
+const express = require("express");
+const cors = require("cors");
+const dotenv = require("dotenv");
 const mongoose = require("mongoose");
-const Router = require("./routes")
+const Router = require("./routes");
+const cookieParser = require("cookie-parser");
 
 dotenv.config();
 const app = express();
+app.use(cookieParser());
 app.use(cors());
 app.use(Router);
 app.use(express.json());
@@ -22,4 +24,3 @@ db.once("open", function () {
 app.listen(process.env.PORT, () => {
   console.log(`Listening on port ${process.env.PORT}!`);
 });
-
