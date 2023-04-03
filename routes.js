@@ -132,6 +132,7 @@ app.post("/register", async (req, res) => {
     const token = getToken(user._id);
     return res
       .cookie("token", token, {
+        maxAge: 7 * 24 * 60 * 60 * 1000,
         httpOnly: process.env.NODE_ENV === "production",
         ...(process.env.NODE_ENV === "production" && {sameSite: "none"}),
         secure: process.env.NODE_ENV === "production",
@@ -179,6 +180,7 @@ app.post("/login", async (req, res) => {
     await userExist.save();
     return res
       .cookie("token", token, {
+        maxAge: 7 * 24 * 60 * 60 * 1000,
         httpOnly: process.env.NODE_ENV === "production",
         ...(process.env.NODE_ENV === "production" && {sameSite: "none"}),
         secure: process.env.NODE_ENV === "production",
