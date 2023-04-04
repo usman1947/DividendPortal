@@ -131,16 +131,11 @@ app.post("/register", async (req, res) => {
     await user.save();
     const token = getToken(user._id);
     return res
-      .cookie("token", token, {
-        maxAge: 7 * 24 * 60 * 60 * 1000,
-        httpOnly: process.env.NODE_ENV === "production",
-        ...(process.env.NODE_ENV === "production" && {sameSite: "none"}),
-        secure: process.env.NODE_ENV === "production",
-      })
       .json({
         success: true,
         message: "User registered successfully",
         data: { id: user._id, name: user.name },
+        token: token,
       });
   } catch (error) {
     console.log(error);
@@ -179,16 +174,11 @@ app.post("/login", async (req, res) => {
     userExist.token = token;
     await userExist.save();
     return res
-      .cookie("token", token, {
-        maxAge: 7 * 24 * 60 * 60 * 1000,
-        httpOnly: process.env.NODE_ENV === "production",
-        ...(process.env.NODE_ENV === "production" && {sameSite: "none"}),
-        secure: process.env.NODE_ENV === "production",
-      })
       .json({
         success: true,
         message: "LoggedIn Successfully",
         data: { id: userExist._id, name: userExist.name },
+        token: token,
       });
   } catch (error) {
     console.log(error);
