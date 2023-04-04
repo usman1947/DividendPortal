@@ -6,7 +6,7 @@ const isAuthenticated = async (req, res, next) => {
     if (!req.headers) {
       res.status(400).send({ error: "Please add HTML headers to your request" });
     }
-    const  token  = req.headers.authorization;
+    const token = req.headers.authorization.split(' ')[1];
     if (!token) {
       res.status(400).send({ error: "Please login to access the data" });
     }
