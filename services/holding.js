@@ -5,7 +5,10 @@ const { HoldingModel } = require("../models");
 const app = express();
 const bp = require("body-parser");
 const { historical, quote } = require("./yahooFinance");
-const { calculateAverageAnnualGrowth } = require("../utils");
+const {
+  calculateAverageAnnualGrowth,
+  getDividendPayoutCount,
+} = require("../utils");
 
 const createHolding = async (holdings, userId) => {
   try {
@@ -13,6 +16,7 @@ const createHolding = async (holdings, userId) => {
       holdings.map(async (holding) => {
         const historicalDividendData = await historical(holding.ticker);
         const data = await quote(holding.ticker);
+        const payoutCount = getDividendPayoutCount(historicalDividendData);
         const fiveYearCAGR = calculateAverageAnnualGrowth(
           historicalDividendData
         );
@@ -23,6 +27,7 @@ const createHolding = async (holdings, userId) => {
           ...holding,
           ...(companyInformation && companyInformation),
           fiveYearCAGR,
+          payoutCount,
           user_id: userId,
         });
       })
