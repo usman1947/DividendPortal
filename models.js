@@ -36,6 +36,11 @@ const HoldingSchema = new mongoose.Schema({
     default: 0,
     required: true,
   },
+  payoutCount: {
+    type: Number,
+    default: 4,
+    required: true,
+  },
   user_id: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
